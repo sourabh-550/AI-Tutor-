@@ -6,7 +6,7 @@ import asyncio
 import httpx
 
 from pdf_processor import extract_chunks
-from embedder import build_and_save_index, search
+from embedder import build_and_save_index, search, get_model
 from pruner import prune_context
 from llm_client import ask_llm
 
@@ -33,6 +33,12 @@ class QuestionResponse(BaseModel):
     sources: list[dict]
     total_candidates: int
     pruned_count: int
+
+@app.on_event("startup")
+async def startup():
+    print("Loading model into RAM...")
+    get_model()
+    print("Model ready!")
 
 @app.get("/")
 def health():
