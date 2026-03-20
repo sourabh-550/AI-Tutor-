@@ -21,7 +21,7 @@ export default function ChatPanel({ onAnswer }) {
     setLoading(true);
 
     try {
-      const res = await axios.post("http://localhost:8000/ask", {
+      const res = await axios.post("https://vidya-ai-backend.onrender.com", {
         question: q,
         top_k: 5,
         similarity_threshold: 0.25,
