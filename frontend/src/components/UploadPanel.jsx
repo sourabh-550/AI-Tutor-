@@ -27,7 +27,7 @@ export default function UploadPanel({ onSuccess }) {
     }, 300);
 
     try {
-      const res = await axios.post("https://vidya-ai-backend.onrender.com/ask", formData);
+      const res = await axios.post("https://vidya-ai-backend.onrender.com/upload", formData)
       clearInterval(interval);
       setProgress(100);
       setStatus(`success:${res.data.filename} — ${res.data.chunks_created} chunks indexed`);
