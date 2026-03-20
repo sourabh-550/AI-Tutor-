@@ -2,6 +2,8 @@ import os
 from fastapi import FastAPI, UploadFile, File, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+import asyncio
+import httpx
 
 from pdf_processor import extract_chunks
 from embedder import build_and_save_index, search
@@ -102,3 +104,19 @@ def ask_question(body: QuestionRequest):
         total_candidates=total_candidates,
         pruned_count=len(pruned)
     )
+
+async def self_ping():
+    """Ping self every 10 minutes to prevent Render free tier sleep."""
+    await asyncio.sleep(60)  # wait 1 min after startup
+    while True:
+        try:
+            async with httpx.AsyncClient() as client:
+                await client.get("https://vidya-ai-backend.onrender.com")
+                print("Self-ping successful")
+        except Exception as e:
+            print(f"Self-ping failed: {e}")
+        await asyncio.sleep(600)  # ping every 10 minutes
+
+@app.on_event("startup")
+async def startup_event():
+    asyncio.create_task(self_ping())
