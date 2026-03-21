@@ -3,7 +3,7 @@
 
 ---
 
-## 1) Overview 🌍 (Problem → Solution)
+## 1) Overview  (Problem → Solution)
 
 In many parts of rural India, learning doesn’t fail because students lack talent — it fails because the internet is unreliable, resources are scattered, and good guidance is hard to access at the right time.
 
