@@ -2,14 +2,14 @@ import { useState } from "react";
 import UploadPanel from "./components/UploadPanel";
 import ChatPanel from "./components/ChatPanel";
 import SourceChunks from "./components/SourceChunks";
-import QuizPanel from "./components/QuizPanel";
+import QuizPage from "./components/QuizPage";
 
 export default function App() {
   const [pdfReady, setPdfReady] = useState(false);
   const [sources, setSources] = useState([]);
   const [stats, setStats] = useState(null);
   const [filename, setFilename] = useState("");
-  const [showQuiz, setShowQuiz] = useState(false);
+  const [activeTab, setActiveTab] = useState("chat");
 
   return (
     <div className="root">
@@ -47,8 +47,6 @@ export default function App() {
               <span className="pill-dot" />
             </div>
           )}
-
-          {showQuiz && <QuizPanel onClose={() => setShowQuiz(false)} />}
         </div>
       </header>
 
@@ -85,13 +83,51 @@ export default function App() {
             </div>
           </div>
         ) : (
-          <div className="workspace">
-            <div className="ws-chat">
-              <ChatPanel onAnswer={(src, st) => { setSources(src); setStats(st); }} />
+          <div className="workspace-root">
+
+            {/* TABS */}
+            <div className="tabs">
+              <button
+                className={`tab ${activeTab === "chat" ? "tab-active" : ""}`}
+                onClick={() => setActiveTab("chat")}
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                  <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+                Chat
+              </button>
+              <button
+                className={`tab ${activeTab === "quiz" ? "tab-active" : ""}`}
+                onClick={() => setActiveTab("quiz")}
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                  <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="1.8"/>
+                  <path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
+                  <line x1="12" y1="17" x2="12.01" y2="17" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                </svg>
+                Quiz
+              </button>
             </div>
-            <div className="ws-sidebar">
-              <SourceChunks sources={sources} stats={stats} />
-            </div>
+
+            {/* CHAT TAB */}
+            {activeTab === "chat" && (
+              <div className="workspace">
+                <div className="ws-chat">
+                  <ChatPanel onAnswer={(src, st) => { setSources(src); setStats(st); }} />
+                </div>
+                <div className="ws-sidebar">
+                  <SourceChunks sources={sources} stats={stats} />
+                </div>
+              </div>
+            )}
+
+            {/* QUIZ TAB */}
+            {activeTab === "quiz" && (
+              <div className="quiz-page">
+                <QuizPage />
+              </div>
+            )}
+
           </div>
         )}
       </main>
@@ -120,7 +156,6 @@ export default function App() {
         }
 
         body { background: var(--bg); color: var(--text); font-family: var(--font-b); -webkit-font-smoothing: antialiased; overflow-x: hidden; }
-
         .root { min-height: 100vh; position: relative; }
 
         .noise {
@@ -151,30 +186,47 @@ export default function App() {
 
         .eyebrow { display: inline-flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; color: var(--gold); margin-bottom: 22px; }
         .eyebrow-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); box-shadow: 0 0 10px var(--gold); }
-
         .hero-title { font-family: var(--font-d); font-size: clamp(44px, 5.5vw, 70px); line-height: 1.08; letter-spacing: -1.5px; margin-bottom: 22px; animation: fadeUp 0.6s ease both; }
         .hero-title em { font-style: italic; background: linear-gradient(135deg, var(--gold) 0%, var(--gold2) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .hero-desc { font-size: 15.5px; line-height: 1.78; color: var(--text2); font-weight: 300; max-width: 420px; margin-bottom: 36px; animation: fadeUp 0.6s 0.1s ease both; }
-
         .features { display: flex; flex-direction: column; gap: 12px; }
         .feature { display: flex; align-items: center; gap: 12px; font-size: 14px; color: var(--text2); animation: fadeUp 0.5s ease both; }
         .feature-icon { width: 34px; height: 34px; border-radius: 9px; flex-shrink: 0; background: var(--surface2); border: 1px solid var(--border2); display: flex; align-items: center; justify-content: center; font-size: 15px; }
-
         @keyframes fadeUp { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
 
-        .workspace { display: grid; grid-template-columns: 1fr 360px; gap: 18px; padding: 24px 0; min-height: calc(100vh - 64px); align-items: start; }
+        /* TABS */
+        .workspace-root { padding: 0; }
+        .tabs {
+          display: flex; gap: 4px;
+          padding: 20px 0 0;
+          border-bottom: 1px solid var(--border);
+          margin-bottom: 0;
+        }
+        .tab {
+          display: flex; align-items: center; gap: 8px;
+          padding: 11px 22px; border-radius: 12px 12px 0 0;
+          background: transparent;
+          border: 1px solid transparent;
+          border-bottom: none;
+          color: var(--text3); font-family: var(--font-b);
+          font-size: 14px; font-weight: 500; cursor: pointer;
+          transition: all 0.15s; margin-bottom: -1px;
+        }
+        .tab:hover { color: var(--text2); background: var(--surface); }
+        .tab-active {
+          background: #080c14 !important;
+          border-color: var(--border2) !important;
+          border-bottom-color: #080c14 !important;
+          color: var(--gold) !important;
+        }
+
+        /* WORKSPACE */
+        .workspace { display: grid; grid-template-columns: 1fr 360px; gap: 18px; padding: 24px 0; min-height: calc(100vh - 130px); align-items: start; }
         @media(max-width:900px){ .workspace{grid-template-columns:1fr} .ws-sidebar{order:-1} }
         .ws-chat { position: sticky; top: 84px; }
         .ws-sidebar { position: sticky; top: 84px; }
 
-        .quiz-btn {
-        display: flex; align-items: center; gap: 7px;
-        background: var(--gold-glow); border: 1px solid rgba(201,168,76,0.35);
-        color: var(--gold); border-radius: 10px; padding: 8px 14px;
-        font-family: var(--font-b); font-size: 13px; font-weight: 500;
-        cursor: pointer; transition: all 0.15s; flex-shrink: 0;
-        }
-        .quiz-btn:hover { background: rgba(201,168,76,0.2); transform: translateY(-1px); }
+        .quiz-page { padding: 24px 0; min-height: calc(100vh - 130px); }
 
         ::-webkit-scrollbar { width: 3px; }
         ::-webkit-scrollbar-track { background: transparent; }
