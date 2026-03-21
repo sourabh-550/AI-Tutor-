@@ -93,7 +93,8 @@ In simple terms: **less unnecessary reading = less cost per question** — makin
 
 
 - **🌿 Context Pruning visualization (before vs after)**  
-  _(placeholder)_
+  <img width="1366" height="768" alt="image" src="https://github.com/user-attachments/assets/a8158188-90f6-4485-9d5d-f4a326474d55" />
+
 
 ---
 
