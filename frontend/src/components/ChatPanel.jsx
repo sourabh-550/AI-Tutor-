@@ -17,7 +17,7 @@ export default function ChatPanel({ onAnswer }) {
     setQuestion("");
     setLoading(true);
     try {
-      const res = await axios.post("http://localhost:8000/ask", { question: q, top_k: 5, similarity_threshold: 0.25 });
+      const res = await axios.post("https://vidya-ai-backend.onrender.com/ask", { question: q, top_k: 5, similarity_threshold: 0.25 });
       setMessages(p => [...p, { role: "ai", text: res.data.answer, meta: { total: res.data.total_candidates, pruned: res.data.pruned_count } }]);
       onAnswer(res.data.sources, { total: res.data.total_candidates, pruned: res.data.pruned_count });
     } catch {
