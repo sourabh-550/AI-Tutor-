@@ -54,7 +54,7 @@ No complicated setup. No switching between apps. Just ask and learn.
 ## 4) Why It Matters 🇮🇳
 
 ### Learning access for rural India  
-Students in low-connectivity regions often rely on a single book and limited support. EduPrune AI makes that book *interactive* — like having a tutor on-demand.
+Students in low-connectivity regions often rely on a single book and limited support. EduPrune AI makes that book *interactive* — like having a tutor on-demand in anytime and anywhere.
 
 ### Cost reduction that actually helps scale  
 Most AI tutoring systems become expensive because they repeatedly process large chunks of text. EduPrune AI’s **Context Pruning** cuts that down by sending only the most relevant snippets for each question.
