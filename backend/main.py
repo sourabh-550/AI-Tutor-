@@ -1,9 +1,7 @@
-import os
 from fastapi import FastAPI, UploadFile, File, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import asyncio
-import httpx
 
 from pdf_processor import extract_chunks
 from embedder import build_and_save_index, search, get_model
@@ -14,11 +12,8 @@ app = FastAPI(title="AI Tutor - RAG API")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:5173",
-        "https://vidyaai-nine.vercel.app"
-    ],
-    allow_credentials=True,
+    allow_origins=["*"],
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
