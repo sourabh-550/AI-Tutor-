@@ -97,6 +97,52 @@ In simple terms: **less unnecessary reading = less cost per question** — makin
 
 ---
 
+## 🛠️ Tech Stack
+
+### Frontend
+| Technology | Purpose |
+|------------|---------|
+| React 18 | UI Framework |
+| Vite | Build Tool |
+| Axios | HTTP Client |
+| CSS-in-JS | Styling |
+| Google Fonts (Playfair Display + Outfit) | Typography |
+
+### Backend
+| Technology | Purpose |
+|------------|---------|
+| FastAPI | REST API Framework |
+| Uvicorn | ASGI Server |
+| PyMuPDF | PDF Text Extraction |
+| FAISS (CPU) | Vector Similarity Search |
+| Cohere API | Text Embeddings |
+| Groq API (LLama 3.1 8B) | LLM for Answers & Quiz |
+| Python Dotenv | Environment Variables |
+
+### AI & ML Pipeline
+| Technology | Purpose |
+|------------|---------|
+| Cohere embed-english-light-v3.0 | Document & Query Embeddings |
+| FAISS IndexFlatIP | Vector Indexing & Retrieval |
+| Cosine Similarity | Chunk Ranking |
+| LLaMA 3.1 8B (via Groq) | Answer Generation |
+| Custom Pruning Pipeline | Context Quality Filter |
+
+### Deployment
+| Technology | Purpose |
+|------------|---------|
+| Vercel | Frontend Hosting |
+| Render | Backend Hosting |
+| GitHub | Version Control |
+
+### Free APIs Used
+| API | Free Tier |
+|-----|-----------|
+| Groq | Free LLM inference |
+| Cohere | Free embeddings |
+| Vercel | Free frontend hosting |
+| Render | Free backend hosting |
+
 ## 7) Future Improvements 🔭
 
 - **Offline-first mode** for intermittent connectivity (sync when network returns)
