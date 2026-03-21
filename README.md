@@ -1,4 +1,4 @@
-# VidyaAI 🌿🤖  
+# VidyaAI   
 ### Smart tutoring for low-connectivity learning — faster answers, lower cost, built for the real world.
 
 ---
