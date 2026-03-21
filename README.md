@@ -19,7 +19,7 @@ The core breakthrough is **Context Pruning**: instead of sending entire chapters
   - Works with real classroom material: guides, notes, reference books, handbooks.
 
 - **🔎 Ask questions naturally**
-  - “Explain this like I’m in 8th grade.”
+  - “Explain this like I’m in 7th grade.”
   - “Give me 5 exam-style questions from this chapter.”
   - “Summarize this topic in bullet points.”
 
