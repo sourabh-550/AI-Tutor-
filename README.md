@@ -1,4 +1,4 @@
-# VidyaAI 🌿🤖  
+# VidyaAI 
 ### Smart tutoring for low-connectivity learning — faster answers, lower cost, built for the real world.
 
 ---
@@ -42,7 +42,7 @@ The core breakthrough is **Context Pruning**: instead of sending entire chapters
 
 1. **Upload a textbook PDF**
 2. **EduPrune AI scans and organizes the content**
-3. **You ask a question**
+3. **You ask a question releated to input**
 4. **The system finds relevant sections**
 5. **Context Pruning trims the content to only what matters**
 6. **The tutor responds with a clear, textbook-based answer**
