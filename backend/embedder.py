@@ -2,28 +2,41 @@ import os
 import pickle
 import numpy as np
 import faiss
+import cohere
+from dotenv import load_dotenv
+
+load_dotenv()
 
 STORE_DIR = "faiss_store"
 INDEX_PATH = os.path.join(STORE_DIR, "index.faiss")
 CHUNKS_PATH = os.path.join(STORE_DIR, "chunks.pkl")
 
-_model = None
-
-def get_model():
-    global _model
-    if _model is None:
-        from sentence_transformers import SentenceTransformer
-        _model = SentenceTransformer("paraphrase-MiniLM-L3-v2")
-    return _model
+client = cohere.Client(os.getenv("COHERE_API_KEY"))
 
 def embed_texts(texts: list[str]) -> np.ndarray:
-    embeddings = get_model().encode(
-        texts,
-        show_progress_bar=False,
-        convert_to_numpy=True,
-        batch_size=16
+    """Use Cohere free API — no local model needed."""
+    all_embeddings = []
+    batch_size = 96  # Cohere limit per request
+
+    for i in range(0, len(texts), batch_size):
+        batch = texts[i:i + batch_size]
+        response = client.embed(
+            texts=batch,
+            model="embed-english-light-v3.0",  # fastest free model
+            input_type="search_document"
+        )
+        all_embeddings.extend(response.embeddings)
+
+    return np.array(all_embeddings, dtype="float32")
+
+def embed_query(text: str) -> np.ndarray:
+    """Query embedding uses different input_type."""
+    response = client.embed(
+        texts=[text],
+        model="embed-english-light-v3.0",
+        input_type="search_query"
     )
-    return embeddings.astype("float32")
+    return np.array(response.embeddings, dtype="float32")
 
 def build_and_save_index(chunks: list[str]):
     os.makedirs(STORE_DIR, exist_ok=True)
@@ -43,7 +56,7 @@ def search(query: str, top_k: int = 20) -> list[dict]:
     index = faiss.read_index(INDEX_PATH)
     with open(CHUNKS_PATH, "rb") as f:
         chunks = pickle.load(f)
-    query_embedding = embed_texts([query])
+    query_embedding = embed_query(query)
     faiss.normalize_L2(query_embedding)
     scores, indices = index.search(query_embedding, min(top_k, len(chunks)))
     results = []
@@ -55,3 +68,6 @@ def search(query: str, top_k: int = 20) -> list[dict]:
                 "index": int(idx)
             })
     return results
+
+def get_model():
+    pass  # No local model needed

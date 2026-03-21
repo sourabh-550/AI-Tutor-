@@ -10,65 +10,82 @@ export default function App() {
   const [filename, setFilename] = useState("");
 
   return (
-    <div className="app-root">
-      {/* Background grid */}
-      <div className="bg-grid" />
-      <div className="bg-glow" />
+    <div className="root">
+      <div className="noise" />
+      <div className="ambient-1" />
+      <div className="ambient-2" />
 
-      {/* Header */}
       <header className="header">
         <div className="header-inner">
           <div className="logo">
-            <div className="logo-icon">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            <div className="logo-mark">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                <path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
             </div>
-            <span className="logo-text">VidyaAI</span>
-            <span className="logo-badge">BETA</span>
+            <span className="logo-name">VidyaAI</span>
           </div>
-          <div className="header-right">
-            <span className="header-tag">RAG · FAISS · Groq</span>
-            {pdfReady && (
-              <div className="status-pill">
-                <span className="status-dot" />
-                {filename}
-              </div>
-            )}
-          </div>
+
+          <nav className="nav">
+            <span className="nav-item">RAG Pipeline</span>
+            <span className="nav-dot" />
+            <span className="nav-item">FAISS Search</span>
+            <span className="nav-dot" />
+            <span className="nav-item">Groq LLM</span>
+          </nav>
+
+          {pdfReady && (
+            <div className="doc-pill">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none">
+                <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                <polyline points="14 2 14 8 20 8" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+              </svg>
+              <span>{filename}</span>
+              <span className="pill-dot" />
+            </div>
+          )}
         </div>
       </header>
 
-      {/* Main */}
       <main className="main">
         {!pdfReady ? (
           <div className="landing">
-            <div className="landing-text">
+            <div className="landing-left">
+              <div className="eyebrow">
+                <span className="eyebrow-dot" />
+                AI-Powered Education
+              </div>
               <h1 className="hero-title">
-                AI Tutor for<br />
-                <span className="hero-accent">Every Student</span>
+                Your Personal<br />
+                <em>Study Companion</em>
               </h1>
-              <p className="hero-sub">
-                Upload your textbook. Ask anything. Get instant, accurate answers powered by context-aware AI — built for India's remote learners.
+              <p className="hero-desc">
+                Transform any textbook into an intelligent tutor. Upload your PDF, ask questions in plain language, and receive precise answers drawn directly from your material.
               </p>
-              <div className="hero-stats">
-                <div className="stat"><span>RAG</span><label>Architecture</label></div>
-                <div className="stat-div" />
-                <div className="stat"><span>FAISS</span><label>Vector Search</label></div>
-                <div className="stat-div" />
-                <div className="stat"><span>Free</span><label>100% Open Source</label></div>
+              <div className="features">
+                {[
+                  { icon: "⚡", label: "Instant answers from your documents" },
+                  { icon: "🎯", label: "Context-pruned for accuracy" },
+                  { icon: "🔒", label: "Your data stays private" },
+                ].map((f, i) => (
+                  <div className="feature" key={i} style={{ animationDelay: `${0.1 + i * 0.1}s` }}>
+                    <span className="feature-icon">{f.icon}</span>
+                    <span>{f.label}</span>
+                  </div>
+                ))}
               </div>
             </div>
-            <div className="upload-wrapper">
+            <div className="landing-right">
               <UploadPanel onSuccess={(name) => { setFilename(name); setPdfReady(true); }} />
             </div>
           </div>
         ) : (
-          <div className="chat-layout">
-            <div className="chat-main">
+          <div className="workspace">
+            <div className="ws-chat">
               <ChatPanel onAnswer={(src, st) => { setSources(src); setStats(st); }} />
             </div>
-            <div className="chat-sidebar">
+            <div className="ws-sidebar">
               <SourceChunks sources={sources} stats={stats} />
             </div>
           </div>
@@ -76,141 +93,79 @@ export default function App() {
       </main>
 
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Outfit:wght@300;400;500;600&display=swap');
 
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
         :root {
-          --bg: #0a0a0f;
-          --surface: #111118;
-          --surface2: #16161f;
+          --bg: #080c14;
+          --surface: rgba(255,255,255,0.03);
+          --surface2: rgba(255,255,255,0.055);
           --border: rgba(255,255,255,0.07);
-          --border2: rgba(255,255,255,0.12);
-          --accent: #f97316;
-          --accent2: #fb923c;
-          --accent-glow: rgba(249,115,22,0.15);
-          --text: #f1f0ee;
-          --text2: #9998a8;
-          --text3: #5a596a;
-          --green: #22c55e;
-          --radius: 16px;
-          --font-display: 'Syne', sans-serif;
-          --font-body: 'DM Sans', sans-serif;
+          --border2: rgba(255,255,255,0.11);
+          --gold: #c9a84c;
+          --gold2: #e8c97a;
+          --gold-glow: rgba(201,168,76,0.15);
+          --text: #f0ede8;
+          --text2: #9896a4;
+          --text3: #45434f;
+          --green: #4ade80;
+          --r: 18px;
+          --font-d: 'Playfair Display', serif;
+          --font-b: 'Outfit', sans-serif;
         }
 
-        body { background: var(--bg); color: var(--text); font-family: var(--font-body); }
+        body { background: var(--bg); color: var(--text); font-family: var(--font-b); -webkit-font-smoothing: antialiased; overflow-x: hidden; }
 
-        .app-root { min-height: 100vh; position: relative; overflow-x: hidden; }
+        .root { min-height: 100vh; position: relative; }
 
-        .bg-grid {
-          position: fixed; inset: 0; z-index: 0;
-          background-image:
-            linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
-          background-size: 48px 48px;
-          pointer-events: none;
+        .noise {
+          position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.03;
+          background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+          background-size: 180px;
         }
+        .ambient-1 { position: fixed; top: -250px; right: -150px; width: 650px; height: 650px; border-radius: 50%; background: radial-gradient(circle, rgba(201,168,76,0.07) 0%, transparent 65%); pointer-events: none; z-index: 0; }
+        .ambient-2 { position: fixed; bottom: -250px; left: -150px; width: 550px; height: 550px; border-radius: 50%; background: radial-gradient(circle, rgba(99,102,241,0.05) 0%, transparent 65%); pointer-events: none; z-index: 0; }
 
-        .bg-glow {
-          position: fixed; top: -200px; left: 50%; transform: translateX(-50%);
-          width: 800px; height: 500px; z-index: 0;
-          background: radial-gradient(ellipse, rgba(249,115,22,0.08) 0%, transparent 70%);
-          pointer-events: none;
-        }
+        .header { position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--border); background: rgba(8,12,20,0.85); backdrop-filter: blur(28px); }
+        .header-inner { max-width: 1280px; margin: 0 auto; padding: 0 32px; height: 64px; display: flex; align-items: center; gap: 24px; }
+        .logo { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+        .logo-mark { width: 34px; height: 34px; border-radius: 10px; background: linear-gradient(135deg, var(--gold), var(--gold2)); color: #080c14; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 24px var(--gold-glow); }
+        .logo-name { font-family: var(--font-d); font-weight: 700; font-size: 20px; letter-spacing: -0.3px; }
+        .nav { flex: 1; display: flex; align-items: center; justify-content: center; gap: 14px; }
+        .nav-item { font-size: 11.5px; color: var(--text3); font-weight: 500; letter-spacing: 0.4px; }
+        .nav-dot { width: 3px; height: 3px; border-radius: 50%; background: var(--text3); opacity: 0.5; }
+        .doc-pill { display: flex; align-items: center; gap: 7px; background: rgba(74,222,128,0.08); border: 1px solid rgba(74,222,128,0.2); border-radius: 20px; padding: 5px 12px; font-size: 12px; color: var(--green); font-weight: 500; max-width: 200px; flex-shrink: 0; overflow: hidden; }
+        .doc-pill span:nth-child(2) { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .pill-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--green); flex-shrink: 0; animation: pulse 2s infinite; }
+        @keyframes pulse { 0%,100%{opacity:1}50%{opacity:0.4} }
 
-        /* HEADER */
-        .header {
-          position: sticky; top: 0; z-index: 100;
-          border-bottom: 1px solid var(--border);
-          background: rgba(10,10,15,0.85);
-          backdrop-filter: blur(20px);
-        }
-        .header-inner {
-          max-width: 1200px; margin: 0 auto;
-          padding: 0 24px; height: 60px;
-          display: flex; align-items: center; justify-content: space-between;
-        }
-        .logo { display: flex; align-items: center; gap: 10px; }
-        .logo-icon {
-          width: 36px; height: 36px; border-radius: 10px;
-          background: var(--accent); color: #fff;
-          display: flex; align-items: center; justify-content: center;
-        }
-        .logo-text {
-          font-family: var(--font-display); font-weight: 800;
-          font-size: 18px; letter-spacing: -0.5px;
-        }
-        .logo-badge {
-          font-size: 10px; font-weight: 600; letter-spacing: 1px;
-          background: var(--accent-glow); color: var(--accent);
-          border: 1px solid var(--accent); border-radius: 4px;
-          padding: 2px 6px;
-        }
-        .header-right { display: flex; align-items: center; gap: 12px; }
-        .header-tag {
-          font-size: 12px; color: var(--text3); font-family: monospace;
-          letter-spacing: 0.5px;
-        }
-        .status-pill {
-          display: flex; align-items: center; gap: 6px;
-          background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.25);
-          border-radius: 20px; padding: 4px 12px;
-          font-size: 12px; color: var(--green); font-weight: 500;
-          max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-        }
-        .status-dot {
-          width: 6px; height: 6px; border-radius: 50%;
-          background: var(--green); flex-shrink: 0;
-          animation: pulse 2s infinite;
-        }
-        @keyframes pulse {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0.4; }
-        }
+        .main { position: relative; z-index: 1; max-width: 1280px; margin: 0 auto; padding: 0 32px; }
 
-        /* MAIN */
-        .main { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+        .landing { display: grid; grid-template-columns: 1fr 460px; gap: 80px; align-items: center; min-height: calc(100vh - 64px); padding: 80px 0; }
+        @media(max-width:900px){ .landing { grid-template-columns:1fr; gap:48px; padding:48px 0; } }
 
-        /* LANDING */
-        .landing {
-          display: grid; grid-template-columns: 1fr 1fr;
-          gap: 80px; align-items: center; min-height: calc(100vh - 60px);
-          padding: 60px 0;
-        }
-        @media (max-width: 768px) {
-          .landing { grid-template-columns: 1fr; gap: 40px; padding: 40px 0; }
-        }
-        .hero-title {
-          font-family: var(--font-display); font-weight: 800;
-          font-size: clamp(40px, 5vw, 64px); line-height: 1.05;
-          letter-spacing: -2px; margin-bottom: 20px;
-        }
-        .hero-accent {
-          background: linear-gradient(135deg, var(--accent), #fbbf24);
-          -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        }
-        .hero-sub {
-          font-size: 16px; line-height: 1.7; color: var(--text2);
-          font-weight: 300; max-width: 420px; margin-bottom: 40px;
-        }
-        .hero-stats { display: flex; align-items: center; gap: 20px; }
-        .stat { display: flex; flex-direction: column; gap: 2px; }
-        .stat span { font-family: var(--font-display); font-weight: 700; font-size: 18px; color: var(--accent); }
-        .stat label { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.5px; }
-        .stat-div { width: 1px; height: 32px; background: var(--border2); }
+        .eyebrow { display: inline-flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; color: var(--gold); margin-bottom: 22px; }
+        .eyebrow-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); box-shadow: 0 0 10px var(--gold); }
 
-        /* CHAT LAYOUT */
-        .chat-layout {
-          display: grid; grid-template-columns: 1fr 380px;
-          gap: 24px; padding: 24px 0; min-height: calc(100vh - 60px);
-          align-items: start;
-        }
-        @media (max-width: 900px) {
-          .chat-layout { grid-template-columns: 1fr; }
-          .chat-sidebar { order: -1; }
-        }
-        .chat-main { position: sticky; top: 84px; }
-        .chat-sidebar { position: sticky; top: 84px; }
+        .hero-title { font-family: var(--font-d); font-size: clamp(44px, 5.5vw, 70px); line-height: 1.08; letter-spacing: -1.5px; margin-bottom: 22px; animation: fadeUp 0.6s ease both; }
+        .hero-title em { font-style: italic; background: linear-gradient(135deg, var(--gold) 0%, var(--gold2) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .hero-desc { font-size: 15.5px; line-height: 1.78; color: var(--text2); font-weight: 300; max-width: 420px; margin-bottom: 36px; animation: fadeUp 0.6s 0.1s ease both; }
+
+        .features { display: flex; flex-direction: column; gap: 12px; }
+        .feature { display: flex; align-items: center; gap: 12px; font-size: 14px; color: var(--text2); animation: fadeUp 0.5s ease both; }
+        .feature-icon { width: 34px; height: 34px; border-radius: 9px; flex-shrink: 0; background: var(--surface2); border: 1px solid var(--border2); display: flex; align-items: center; justify-content: center; font-size: 15px; }
+
+        @keyframes fadeUp { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
+
+        .workspace { display: grid; grid-template-columns: 1fr 360px; gap: 18px; padding: 24px 0; min-height: calc(100vh - 64px); align-items: start; }
+        @media(max-width:900px){ .workspace{grid-template-columns:1fr} .ws-sidebar{order:-1} }
+        .ws-chat { position: sticky; top: 84px; }
+        .ws-sidebar { position: sticky; top: 84px; }
+
+        ::-webkit-scrollbar { width: 3px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
       `}</style>
     </div>
   );
