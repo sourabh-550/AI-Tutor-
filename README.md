@@ -65,7 +65,7 @@ In simple terms: **less unnecessary reading = less cost per question** — makin
 
 ## 5) Usage 🚀 (What Users Do)
 
-1. **Open EduPrune AI**
+1. **Open EduPrune AI in Any Browser**
 2. **Upload a PDF textbook**
 3. **Select the book (optional if multiple uploads)**
 4. **Ask questions**
