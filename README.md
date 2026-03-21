@@ -170,10 +170,6 @@ Contributions are welcome — especially around:
 
 ---
 
-## 9) License 📄
 
-This project is licensed under the **MIT License** — see the `LICENSE` file for details.
-
----
 
 ### Built for learners who deserve answers, not buffering. 🌾📶
