@@ -7,7 +7,7 @@
 
 In many parts of rural India, learning doesn’t fail because students lack talent — it fails because the internet is unreliable, resources are scattered, and good guidance is hard to access at the right time.
 
-EduPrune AI turns any textbook into a personal tutor. Students upload a PDF, ask questions in plain language, and get clear answers grounded in their own material — even when bandwidth is limited.
+VidyaAI turns any textbook into a personal tutor. Students upload a PDF, ask questions in plain language, and get clear answers grounded in their own material — even when bandwidth is limited.
 
 The core breakthrough is **Context Pruning**: instead of sending entire chapters to the AI, EduPrune AI carefully selects only the most useful pieces of text. That means **less data processed, quicker responses, and significantly lower cost** — without losing accuracy.
 
