@@ -23,7 +23,7 @@ export default function UploadPanel({ onSuccess }) {
     const iv = setInterval(() => setProgress(p => p < 82 ? p + Math.random() * 5 : p), 400);
 
     try {
-      const res = await axios.post("http://localhost:8000/upload", formData, { timeout: 120000 });
+      const res = await axios.post("https://vidya-ai-backend.onrender.com/upload", formData, {timeout: 120000});
       clearInterval(iv);
       setProgress(100);
       setStatus(`ok:${res.data.filename} · ${res.data.chunks_created} passages indexed`);
