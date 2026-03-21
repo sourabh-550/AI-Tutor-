@@ -2,12 +2,14 @@ import { useState } from "react";
 import UploadPanel from "./components/UploadPanel";
 import ChatPanel from "./components/ChatPanel";
 import SourceChunks from "./components/SourceChunks";
+import QuizPanel from "./components/QuizPanel";
 
 export default function App() {
   const [pdfReady, setPdfReady] = useState(false);
   const [sources, setSources] = useState([]);
   const [stats, setStats] = useState(null);
   const [filename, setFilename] = useState("");
+  const [showQuiz, setShowQuiz] = useState(false);
 
   return (
     <div className="root">
@@ -45,6 +47,8 @@ export default function App() {
               <span className="pill-dot" />
             </div>
           )}
+
+          {showQuiz && <QuizPanel onClose={() => setShowQuiz(false)} />}
         </div>
       </header>
 
@@ -162,6 +166,15 @@ export default function App() {
         @media(max-width:900px){ .workspace{grid-template-columns:1fr} .ws-sidebar{order:-1} }
         .ws-chat { position: sticky; top: 84px; }
         .ws-sidebar { position: sticky; top: 84px; }
+
+        .quiz-btn {
+        display: flex; align-items: center; gap: 7px;
+        background: var(--gold-glow); border: 1px solid rgba(201,168,76,0.35);
+        color: var(--gold); border-radius: 10px; padding: 8px 14px;
+        font-family: var(--font-b); font-size: 13px; font-weight: 500;
+        cursor: pointer; transition: all 0.15s; flex-shrink: 0;
+        }
+        .quiz-btn:hover { background: rgba(201,168,76,0.2); transform: translateY(-1px); }
 
         ::-webkit-scrollbar { width: 3px; }
         ::-webkit-scrollbar-track { background: transparent; }

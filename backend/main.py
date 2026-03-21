@@ -1,3 +1,4 @@
+import os
 from fastapi import FastAPI, UploadFile, File, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -119,3 +120,94 @@ async def self_ping():
 @app.on_event("startup")
 async def startup_event():
     asyncio.create_task(self_ping())
+
+
+
+class QuizRequest(BaseModel):
+    topic: str = ""
+    num_questions: int = 10
+
+class QuizQuestion(BaseModel):
+    question: str
+    options: list[str]
+    correct: str
+    explanation: str
+    type: str  # "mcq" or "truefalse"
+
+class QuizResponse(BaseModel):
+    questions: list[QuizQuestion]
+    topic: str
+
+@app.post("/quiz", response_model=QuizResponse)
+def generate_quiz(body: QuizRequest):
+    if not os.path.exists("faiss_store/chunks.pkl"):
+        raise HTTPException(status_code=404, detail="No PDF uploaded. Upload a PDF first.")
+
+    import pickle
+    with open("faiss_store/chunks.pkl", "rb") as f:
+        chunks = pickle.load(f)
+
+    # Pick representative chunks
+    import random
+    sample_chunks = random.sample(chunks, min(8, len(chunks)))
+    context = "\n\n".join(sample_chunks)
+
+    topic_line = f"Topic focus: {body.topic}" if body.topic else "Cover the main topics from the document."
+
+    prompt = f"""You are a teacher creating a quiz from the following study material.
+
+{topic_line}
+
+Study Material:
+{context}
+
+Create exactly {body.num_questions} quiz questions. Mix MCQ and True/False questions.
+
+Respond ONLY with a valid JSON array. No explanation, no markdown, no extra text.
+Format:
+[
+  {{
+    "type": "mcq",
+    "question": "Question text here?",
+    "options": ["A) option1", "B) option2", "C) option3", "D) option4"],
+    "correct": "A) option1",
+    "explanation": "Brief explanation why this is correct."
+  }},
+  {{
+    "type": "truefalse",
+    "question": "Statement here.",
+    "options": ["True", "False"],
+    "correct": "True",
+    "explanation": "Brief explanation."
+  }}
+]"""
+
+    from groq import Groq
+    from dotenv import load_dotenv
+    load_dotenv()
+    groq_client = Groq(api_key=os.getenv("GROQ_API_KEY"))
+
+    response = groq_client.chat.completions.create(
+        model="llama-3.1-8b-instant",
+        messages=[{"role": "user", "content": prompt}],
+        temperature=0.7,
+        max_tokens=2000
+    )
+
+    import json
+    raw = response.choices[0].message.content.strip()
+
+    # Clean markdown if present
+    if "```json" in raw:
+        raw = raw.split("```json")[1].split("```")[0].strip()
+    elif "```" in raw:
+        raw = raw.split("```")[1].split("```")[0].strip()
+
+    questions_data = json.loads(raw)
+
+    questions = [QuizQuestion(**q) for q in questions_data[:body.num_questions]]
+
+    return QuizResponse(
+        questions=questions,
+        topic=body.topic or "Full Document"
+    )
