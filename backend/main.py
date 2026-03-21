@@ -36,9 +36,7 @@ class QuestionResponse(BaseModel):
 
 @app.on_event("startup")
 async def startup():
-    print("Loading model into RAM...")
-    get_model()
-    print("Model ready!")
+    print("VidyaAI backend ready - using Groq API for embeddings!")
 
 @app.get("/")
 def health():

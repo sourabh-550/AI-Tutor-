@@ -2,24 +2,33 @@ import os
 import pickle
 import numpy as np
 import faiss
+from groq import Groq
+from dotenv import load_dotenv
+
+load_dotenv()
 
 STORE_DIR = "faiss_store"
 INDEX_PATH = os.path.join(STORE_DIR, "index.faiss")
 CHUNKS_PATH = os.path.join(STORE_DIR, "chunks.pkl")
 
-# Don't load at startup — load only when first needed
-_model = None
-
-def get_model():
-    global _model
-    if _model is None:
-        from sentence_transformers import SentenceTransformer
-        _model = SentenceTransformer("all-MiniLM-L2-v2")
-    return _model
+client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 
 def embed_texts(texts: list[str]) -> np.ndarray:
-    embeddings = get_model().encode(texts, show_progress_bar=False, convert_to_numpy=True)
-    return embeddings.astype("float32")
+    """Use Groq's free embedding API instead of local model."""
+    all_embeddings = []
+    
+    # Groq embeds in batches of 100
+    batch_size = 100
+    for i in range(0, len(texts), batch_size):
+        batch = texts[i:i+batch_size]
+        response = client.embeddings.create(
+            model="nomic-embed-text-v1.5",
+            input=batch
+        )
+        batch_embeddings = [item.embedding for item in response.data]
+        all_embeddings.extend(batch_embeddings)
+    
+    return np.array(all_embeddings, dtype="float32")
 
 def build_and_save_index(chunks: list[str]):
     os.makedirs(STORE_DIR, exist_ok=True)
@@ -51,3 +60,6 @@ def search(query: str, top_k: int = 20) -> list[dict]:
                 "index": int(idx)
             })
     return results
+
+def get_model():
+    pass  # No local model needed anymore
