@@ -81,7 +81,8 @@ In simple terms: **less unnecessary reading = less cost per question** — makin
 
 ## 6) Demo / Screenshots 🖼️
 
-> Add screenshots / screen recordings here
+> <img width="1366" height="768" alt="image" src="https://github.com/user-attachments/assets/660bc834-df48-4760-a739-2ec0a0b4c8af" />
+
 
 - **📌 Home / Upload screen**  
   _(placeholder)_
