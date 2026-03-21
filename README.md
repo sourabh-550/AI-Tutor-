@@ -13,7 +13,7 @@ The core breakthrough is **Context Pruning**: instead of sending entire chapters
 
 ---
 
-## 2) Key Features ✨⚡️
+## 2) Key Features ✨
 
 - **📚 Upload textbooks (PDFs)**
   - Works with real classroom material: guides, notes, reference books, handbooks.
