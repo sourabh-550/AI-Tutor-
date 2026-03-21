@@ -89,7 +89,8 @@ In simple terms: **less unnecessary reading = less cost per question** — makin
 
 
 - **💬 Q&A experience with textbook grounding**  
-  _(placeholder)_
+  <img width="1366" height="768" alt="image" src="https://github.com/user-attachments/assets/b160bcf9-6b99-4035-a9ef-bf1d59dd7d98" />
+
 
 - **🌿 Context Pruning visualization (before vs after)**  
   _(placeholder)_
