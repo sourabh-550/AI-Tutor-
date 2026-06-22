@@ -3,6 +3,7 @@ from fastapi import FastAPI, UploadFile, File, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import asyncio
+import httpx
 
 from pdf_processor import extract_chunks
 from embedder import build_and_save_index, search, get_model
